@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <title> TA </title>
+  </head>
+  <body>
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <div class="card text-center">
+          <div class="card-header">
+            Sistema de obtencao dos pontos P3 e TP3
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="form-group row">
+                <label for="nasioninion" class="col-5 col-form-label">Distancia Nasion-Inion</label>
+                <div class="col">
+                  <input type="number" class="form-control" id="nasioninion" placeholder="Nasion-Inion">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="tragustragus" class="col-5 col-form-label">Distancia Tragus-Tragus</label>
+                <div class="col">
+                  <input type="number" class="form-control" id="tragustragus" placeholder="Tragus-Tragus">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="circunferencia" class="col-5 col-form-label">Circunferencia da cabeca</label>
+                <div class="col">
+                  <input type="number" class="form-control" id="circunferencia" placeholder="Circunferencia">
+                </div>
+              </div>
+              <a style="color:white;" class="btn btn-dark btn-block" id="calcular">Calcular</a>
+            </form>
+            <div class="row">
+              <p> </p>
+            </div>
+            <table class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Ponto</th>
+                  <th scope="col">Coordenada X</th>
+                  <th scope="col">Coordenada Y</th>
+                  <th scope="col">Distancia do Nasion</th>
+                  <th scope="col">Distancia de Cz</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">P3</th>
+                  <td><p id="xP3"></p></td>
+                  <td><p id="yP3"></p></td>
+                  <td><p id="circP3"></p></td>
+                  <td><p id="raioP3"></p></td>
+                </tr>
+                <tr>
+                  <th scope="row">TP3</th>
+                  <td><p id="xTP3"></p></td>
+                  <td><p id="yTP3"></p></td>
+                  <td><p id="circTP3"></p></td>
+                  <td><p id="raioTP3"></p></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer text-muted">
+            Desenvolvido por Paulo Suen
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+      //Quando toda a pagina e carregada
+        $(document).ready(function(){
+          //E voce clica no elemento de id calcular
+         $("#calcular").click(function() {
+           //Armazeno em variaveis os conteudos dos campos
+           var nasioninion = $("#nasioninion").val();
+           var tragustragus = $("#tragustragus").val();
+           var circunferencia = $("#circunferencia").val();
+          //Aqui eu faço a operaçao que eu quiser
+          var r1 = nasioninion*0.4;
+          var r2 = tragustragus*0.4;
+          var alfa1 = r1*Math.sin(72*Math.PI/180)/(r1*Math.cos(72*Math.PI/180)-r2/2);
+          var beta1 = (r2*Math.sin(36*Math.PI/180)-r1/2)/(r2*Math.cos(36*Math.PI/180));
+          var xP3 = (r1/2+alfa1*r2/2)/(alfa1-beta1);
+          var yP3 = alfa1*(xP3-r2/2);
+          var alfa2 = yP3/(xP3-r2);
+          var beta2 = (r2*Math.sin(36*Math.PI/180))/(r2*Math.cos(36*Math.PI/180)-r2/2);
+          var xTP3 = (alfa2*r2-beta2*r2/2)/(alfa2-beta2);
+          var yTP3 = alfa2*(xTP3-r2);
+          var circP3 = (Math.atan(yP3/xP3)+Math.PI/2)*circunferencia/(2*Math.PI);
+          var raioP3 = Math.sqrt(xP3*xP3+yP3*yP3);
+          var circTP3 = (Math.atan(yTP3/xTP3)+Math.PI/2)*circunferencia/(2*Math.PI);
+          var raioTP3 = Math.sqrt(xTP3*xTP3+yTP3*yTP3);
+          //E ai eu coloco o resultado onde eu quiser. No caso eu coloquei dentro de um paragrafo localizado dentro de um card
+           $("#xP3").text(xP3.toFixed(2));
+           $("#yP3").text(yP3.toFixed(2));
+           $("#xTP3").text(xTP3.toFixed(2));
+           $("#yTP3").text(yTP3.toFixed(2));
+           $("#circP3").text(circP3.toFixed(2));
+           $("#raioP3").text(raioP3.toFixed(2));
+           $("#circTP3").text(circTP3.toFixed(2));
+           $("#raioTP3").text(raioTP3.toFixed(2));
+         });
+
+        });
+
+    </script>
+
+  </body>
+</html>
